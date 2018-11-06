@@ -1,0 +1,8 @@
+# depslib dependency file v1.0
+1541500088 source:c:\users\kuchar\documents\uni\c++\unrulycnf\main.cpp
+	<iostream>
+	<fstream>
+	<string>
+	<limits>
+	<sstream>
+
