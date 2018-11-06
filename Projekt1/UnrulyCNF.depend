@@ -6,3 +6,22 @@
 	<limits>
 	<sstream>
 
+1541535050 source:c:\users\kuchar\documents\uni\satsolving\projekt1\main.cpp
+	<iostream>
+	<fstream>
+	<string>
+	<limits>
+	<sstream>
+	"fileExtraction.h"
+
+1541533655 c:\users\kuchar\documents\uni\satsolving\projekt1\fileextraction.h
+	<string>
+
+1541535031 source:c:\users\kuchar\documents\uni\satsolving\projekt1\fileextraction.cpp
+	<iostream>
+	<fstream>
+	<string>
+	<limits>
+	<sstream>
+	"fileExtraction.h"
+

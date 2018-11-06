@@ -13,21 +13,20 @@ int main(int argc, char *argv[])
     char filename[128];
     string line;
     ifstream file;
-    string inhalt;
     int fileLength;
-    int variable[fileLength];
-    int x1;
-    int x2;
+    int zeilenZahlI;
+    int spaltenZahlI;
+    char variable[100][100][3];
 
     // Dateinamen einlesen
-    cout << "Welches Puzzle soll eingelesen werden?" << endl;
+    cout << "Which puzzle would you like to be solved?" << endl;
     cin.getline(filename, 127);
 
     // Datei öffnen
     file.open(filename, ios_base::in|ios_base::out);
     if (!file) // Datei konnte nicht geöffnet werden
     {
-        cout << "Datei konnte nicht geöffnet werden." << endl;
+        cout << "File couldn't be read." << endl;
     }
     else
     {
@@ -36,18 +35,47 @@ int main(int argc, char *argv[])
         // Anzahl der Zeichen um nötige Zahl der Variablen zu ermitteln
         while (getline(file,line))
         {
-            inhalt = inhalt + line;
-            fileLength = anzahlZeichen(inhalt);
             linear[l]=line;
             l++;
         }
-        int zeilenZahlI = zeilenSpalten(linear[1]);
+        zeilenZahlI = zeilenSpalten(linear[1]);
         cout << zeilenZahlI << " Zeilen" << endl;
         string zeile = to_string(zeilenZahlI);
         int x= zeile.length();
         linear[1] = linear[1].erase(0,x);
-        int spaltenZahlI = zeilenSpalten(linear[1]);
+        spaltenZahlI = zeilenSpalten(linear[1]);
         cout << spaltenZahlI << " Spalten" << endl;
+        fileLength = zeilenZahlI * spaltenZahlI;
+
+        // Belegungen Charvariablen zuweisen
+        for (int i = 2; i<=zeilenZahlI; i++)
+        {
+            for (int j = 1; j<= linear[i].length(); j++)
+            {
+                switch (linear[i][j])
+                {
+                    case '?' :
+                        {
+                            variable[i-1][j][0] = 1;
+                            variable[i-1][j][1] = 0;
+                            variable[i-1][j][2] = 0;
+                        }
+                    case 'B' :
+                        {
+                            variable[i-1][j][0] = 0;
+                            variable[i-1][j][1] = 1;
+                            variable[i-1][j][2] = 0;
+                        }
+                    case 'W' :
+                        {
+                            variable[i-1][j][0] = 0;
+                            variable[i-1][j][1] = 0;
+                            variable[i-1][j][2] = 1;
+                        }
+                }
+
+            }
+        }
 
     }
     return 0;

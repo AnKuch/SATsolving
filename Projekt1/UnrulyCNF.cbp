@@ -32,9 +32,11 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
-		<Unit filename="fileExtraction.cpp">
+		<Unit filename="cnf.cpp" />
+		<Unit filename="cnf.h">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
+		<Unit filename="fileExtraction.cpp" />
 		<Unit filename="fileExtraction.h">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>

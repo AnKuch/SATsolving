@@ -4,8 +4,9 @@
 #include <limits>
 #include <sstream>
 #include "fileExtraction.h"
+using namespace std;
 
-int zeilenSpalten (string a)
+int zeilenSpalten (std::string a)
 {
     std::stringstream parser;
     parser << a;
@@ -20,11 +21,3 @@ int zeilenSpalten (string a)
     return anzahl;
 }
 
-int anzahlZeichen (string a)
-{
-    int x = a.length();
-    int iCount	= 0;
-	for (int i = 0; i < x; i++)
-		if(a[i] != ' ') iCount++;
-    return iCount;
-}
