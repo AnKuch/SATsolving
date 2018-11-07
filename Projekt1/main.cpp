@@ -4,6 +4,7 @@
 #include <limits>
 #include <sstream>
 #include "fileExtraction.h"
+#include "cnf.h"
 
 using namespace std;
 
@@ -78,6 +79,8 @@ int main(int argc, char *argv[])
         }
 
     }
+    string x[8] = *oneOnEach(fileLength,spaltenZahlI);
+    cout << x[0] << endl;
     return 0;
 }
 
