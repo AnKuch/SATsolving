@@ -80,7 +80,7 @@ int main(int argc, char *argv[])
 
     }
     string x[8] = *oneOnEach(fileLength,spaltenZahlI);
-    cout << x[0] << endl;
+    cout << x[4] << endl;
     return 0;
 }
 

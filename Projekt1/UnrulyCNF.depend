@@ -6,7 +6,7 @@
 	<limits>
 	<sstream>
 
-1541622984 source:c:\users\kuchar\documents\uni\satsolving\projekt1\main.cpp
+1541692007 source:c:\users\kuchar\documents\uni\satsolving\projekt1\main.cpp
 	<iostream>
 	<fstream>
 	<string>
@@ -26,11 +26,12 @@
 	<sstream>
 	"fileExtraction.h"
 
-1541611856 source:c:\users\kuchar\documents\uni\satsolving\projekt1\cnf.cpp
+1541692094 source:c:\users\kuchar\documents\uni\satsolving\projekt1\cnf.cpp
 	<iostream>
 	<fstream>
 	<string>
 	<limits>
+	"cnf.h"
 
 1541611268 c:\users\kuchar\documents\uni\satsolving\projekt1\cnf.h
 	<string>
