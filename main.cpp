@@ -87,7 +87,9 @@ int main(int argc, char *argv[])
     struct arra x;
     x = oneOnEach(fileLength,spaltenZahlI);
     cout << x.clause[0] << endl;
-    same(zeilenZahlI,linear) ;
+    struct arra y;
+    y = same(zeilenZahlI,linear) ;
+    cout << y.clause[0] << endl;
     return 0;
 }
 // 1 = schwarz 0 = weiß
@@ -125,7 +127,7 @@ struct arra same(int zeilen, string var[]) {
     struct arra conj;
     conj.clause = new string[2] ;
      for (int i = 1; i<=zeilen; i++)
-        {
+    {
 
             for (int j = 1; j<= var[i].length(); j++)
             {
@@ -134,8 +136,10 @@ struct arra same(int zeilen, string var[]) {
                     case '?' :
                         {
                             conj.clause[0] = conj.clause[0] + ' '+ to_string(i*j)   ;
+                            conj.clause[1] = conj.clause[1] + ' '+ to_string(-(i*j)) ;
                             if (j%3 ==0 ) {
                                 conj.clause[0] = conj.clause[0] + '\n' ;
+                                conj.clause[1] = conj.clause[1] + '\n' ;
                             }
                         }
                     case 'B' :
@@ -149,7 +153,8 @@ struct arra same(int zeilen, string var[]) {
                 }
 
             }
-        }
+    }
+    return conj;
 
 
 }
