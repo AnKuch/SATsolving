@@ -9,6 +9,7 @@
 struct arra oneOnEach (int zeichen, int spalten);
 int zeilenSpalten (std::string);
 char setVariables (std::string);
+struct arra same(int zeilen, std::string var[]);
 
 using namespace std ;
 struct arra{string  *clause ;};
@@ -22,6 +23,7 @@ int main(int argc, char *argv[])
     int zeilenZahlI;
     int spaltenZahlI;
     char variable[100][100][3];
+    string linear[200];
 
 
     // Dateinamen einlesen
@@ -36,7 +38,6 @@ int main(int argc, char *argv[])
     }
     else
     {
-        string linear[200];
         int l=1;
         // Anzahl der Zeichen um nötige Zahl der Variablen zu ermitteln
         while (getline(file,line))
@@ -53,7 +54,7 @@ int main(int argc, char *argv[])
         cout << spaltenZahlI << " Spalten" << endl;
         fileLength = zeilenZahlI * spaltenZahlI;
         // Belegungen Charvariablen zuweisen
-        for (int i = 2; i<=zeilenZahlI; i++)
+       /* for (int i = 2; i<=zeilenZahlI; i++)
         {
             for (int j = 1; j<= linear[i].length(); j++)
             {
@@ -80,7 +81,7 @@ int main(int argc, char *argv[])
                 }
 
             }
-        }
+        } */
 
     }
     struct arra x;
@@ -119,27 +120,31 @@ struct arra oneOnEach (int zeichen, int spalten)
     }
     return conj;
 }
-/*
+
 struct arra same(int zeilen, string var[]) {
     struct arra conj;
     conj.clause = new string[2] ;
      for (int i = 1; i<=zeilen; i++)
         {
+
             for (int j = 1; j<= var[i].length(); j++)
             {
                 switch (var[i][j])
                 {
                     case '?' :
                         {
-                            conj.clause[0] = conj.clause[0] + ' '+to_string(i+j)
+                            conj.clause[0] = conj.clause[0] + ' '+ to_string(i*j)   ;
+                            if (j%3 ==0 ) {
+                                conj.clause[0] = conj.clause[0] + '\n' ;
+                            }
                         }
                     case 'B' :
                         {
-                             conj.clause[0] = conj.clause[0] + ' ' +to_string()
+                             conj.clause[0] = conj.clause[0] + ' ' +to_string(i*j) + '\n' ;
                         }
                     case 'W' :
                         {
-
+                             conj.clause[0] = conj.clause[0] + ' ' +to_string(-(i*j)) + '\n' ;
                         }
                 }
 
@@ -149,7 +154,7 @@ struct arra same(int zeilen, string var[]) {
 
 }
 
-*/
+
 int zeilenSpalten (std::string a)
 {
     std::stringstream parser;
