@@ -6,12 +6,13 @@
 #include "fileExtraction.h"
 //#include "cnf.h"
 
-std::string* oneOnEach (int,int);
+struct array oneOnEach (int zeichen, int spalten);
 int zeilenSpalten (std::string);
 char setVariables (std::string);
 
 using namespace std;
 
+struct array{string clause[8];};
 
 int main(int argc, char *argv[])
 {
@@ -22,6 +23,7 @@ int main(int argc, char *argv[])
     int zeilenZahlI;
     int spaltenZahlI;
     char variable[100][100][3];
+
 
     // Dateinamen einlesen
     cout << "Which puzzle would you like to be solved?" << endl;
@@ -83,63 +85,39 @@ int main(int argc, char *argv[])
         }
 
     }
-    string x=*oneOnEach(fileLength,spaltenZahlI);
-    cout << x[4] << endl;
+    struct array x;
+    x = oneOnEach(fileLength,spaltenZahlI);
+    cout << x.clause[0] << endl;
     return 0;
 }
-string* oneOnEach (int zeichen, int spalten)
+// 1 = schwarz 0 = weiß
+struct array oneOnEach (int zeichen, int spalten)
 {
-    int a=zeichen*3;
-    string* clause=new string[8];
-    for (int i=1; i<=a; i++)
+    struct array conj;
+    for (int i=1; i<=zeichen; i++)
     {
-        int x = i % 3;
-
-        switch (x)
+        if (i!=1)
         {
-        case 1: break;
-        case 2:
+            if (i<zeichen)
             {
-                if (i!=2)
-                {
-                    if (i<(a*3-2))
-                    {
-                        clause[0] = clause[0] + ' ' + to_string(-i) + ' ' + to_string(-(i+3)) + ' ' + to_string(-(i+6)) + '\n';
-                        clause[1] = clause[1] + ' ' + to_string(-i) + ' ' + to_string(-(i+3)) + ' ' + to_string(-(i-3)) + '\n';
-                        clause[2] = clause[2] + ' ' + to_string(-i) + ' ' + to_string(-(i+(spalten*3))) + ' ' + to_string(-(i+(spalten*6))) + '\n';
-                        clause[3] = clause[3] + ' ' + to_string(-i) + ' ' + to_string(-(i+(spalten*3))) + ' ' + to_string(-(i-(spalten*3))) + '\n';
-                        break;
-                    }
-                    else
-                    {
-                        clause[1] = clause[1] + ' ' + to_string(-i) + ' ' + to_string(-(i+3)) + ' ' + to_string(-(i-3)) + '\n';
-                        clause[3] = clause[3] + ' ' + to_string(-i) + ' ' + to_string(-(i+(spalten*3))) + ' ' + to_string(-(i-(spalten*3))) + '\n';
-                        break;
-                    }
-                }
-                else
-                {
-                    clause[0] = clause[0] + ' ' + to_string(-i) + ' ' + to_string(-(i+3)) + ' ' + to_string(-(i+6)) + '\n';
-                    clause[2] = clause[2] + ' ' + to_string(-i) + ' ' + to_string(-(i+(spalten*3))) + ' ' + to_string(-(i+(spalten*6))) + '\n';
-                }
+                conj.clause[0] = conj.clause[0] + ' ' + to_string(-i) + ' ' + to_string(-(i+1)) + ' ' + to_string(-(i+2)) + '\n';
+                conj.clause[1] = conj.clause[1] + ' ' + to_string(-i) + ' ' + to_string(-(i+1)) + ' ' + to_string(-(i-1)) + '\n';
+                conj.clause[2] = conj.clause[2] + ' ' + to_string(-i) + ' ' + to_string(-(i+spalten)) + ' ' + to_string(-(i+spalten)) + '\n';
+                conj.clause[3] = conj.clause[3] + ' ' + to_string(-i) + ' ' + to_string(-(i+spalten)) + ' ' + to_string(-(i-spalten)) + '\n';
             }
-        case 0:
+            else
             {
-                if (i!=3)
-                {
-                    if (i<(a*3-2))
-                    {
-                        clause[4] = clause[4] + ' ' + to_string(-i) + ' ' + to_string(-(i+3)) + ' '  + to_string(-(i+6)) + '\n';
-                        clause[5] = clause[5] + ' ' + to_string(-i) + ' ' + to_string(-(i+3)) + ' ' + to_string(-(i-3)) + '\n';
-                        clause[6] = clause[6] + ' ' + to_string(-i) + ' ' + to_string(-(i+(spalten*3))) + ' ' + to_string(-(i+(spalten*6))) + '\n';
-                        clause[7] = clause[7] + ' ' + to_string(-i) + ' ' + to_string(-(i+(spalten*3))) + ' ' + to_string(-(i-(spalten*3))) + '\n';
-                        break;
-                    }
+                conj.clause[1] = conj.clause[1] + ' ' + to_string(-i) + ' ' + to_string(-(i+1)) + ' ' + to_string(-(i-1)) + '\n';
+                conj.clause[3] = conj.clause[3] + ' ' + to_string(-i) + ' ' + to_string(-(i+spalten)) + ' ' + to_string(-(i-spalten)) + '\n';
             }
         }
+        else
+        {
+            conj.clause[0] = conj.clause[0] + ' ' + to_string(-i) + ' ' + to_string(-(i+1)) + ' ' + to_string(-(i+2)) + '\n';
+            conj.clause[2] = conj.clause[2] + ' ' + to_string(-i) + ' ' + to_string(-(i+spalten)) + ' ' + to_string(-(i+spalten)) + '\n';
+        }
     }
-    cout << clause[1] << endl;
-    return clause;
+    return conj;
 }
 int zeilenSpalten (std::string a)
 {
