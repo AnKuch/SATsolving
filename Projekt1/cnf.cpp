@@ -6,7 +6,7 @@
 
 using namespace std;
 
-string* oneOnEach (int zeichen, int spalten)
+/*string* oneOnEach (int zeichen, int spalten)
 {
     int a=zeichen*3;
     string* clause=new string[8];
