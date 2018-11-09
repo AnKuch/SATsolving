@@ -125,32 +125,42 @@ struct arra oneOnEach (int zeichen, int spalten)
 
 struct arra same(int zeilen, string var[]) {
     struct arra conj;
-    conj.clause = new string[2] ;
-     for (int i = 1; i<=zeilen; i++)
-    {
+    conj.clause = new string[3] ;
+    int pos =0; // Aktuelle Gesamtposition
+    for (int i = 2; i<=zeilen; i++)
+    {   int sppos = 0 ; // Spaltenzähler für ?
 
-            for (int j = 1; j<= var[i].length(); j++)
+
+            for (int j = 0; j< var[i].length(); j++)
             {
+                pos++;
+                bool flag = false ;
                 switch (var[i][j])
                 {
                     case '?' :
                         {
-                            conj.clause[0] = conj.clause[0] + ' '+ to_string(i*j)   ;
-                            conj.clause[1] = conj.clause[1] + ' '+ to_string(-(i*j)) ;
-                            if (j%3 ==0 ) {
+                            sppos++;
+                            conj.clause[0] = conj.clause[0] + ' '+ to_string(pos)   ;
+                            conj.clause[1] = conj.clause[1] + ' '+ to_string(-(pos)) ;
+                            if (sppos%3 ==0 ) {
+                                flag = true;
                                 conj.clause[0] = conj.clause[0] + '\n' ;
                                 conj.clause[1] = conj.clause[1] + '\n' ;
                             }
                         }
                     case 'B' :
                         {
-                             conj.clause[0] = conj.clause[0] + ' ' +to_string(i*j) + '\n' ;
+                             conj.clause[2] = conj.clause[0] + ' ' +to_string(pos) + '\n' ;
                         }
                     case 'W' :
                         {
-                             conj.clause[0] = conj.clause[0] + ' ' +to_string(-(i*j)) + '\n' ;
+                             conj.clause[2] = conj.clause[0] + ' ' +to_string(-(pos)) + '\n' ;
                         }
                 }
+               if ((j+1 == var[i].length()) && (!flag)) {
+                  conj.clause[0] = conj.clause[0] + '\n' ;
+                  conj.clause[1] = conj.clause[1] + '\n' ;
+               }
 
             }
     }
