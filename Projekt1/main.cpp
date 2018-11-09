@@ -6,7 +6,8 @@
 #include "fileExtraction.h"
 //#include "cnf.h"
 
-struct arra oneOnEach (int zeichen, int spalten);
+struct arra oneOnEachB (int zeichen, int spalten);
+struct arra oneOnEachW (int zeichen, int spalten);
 int zeilenSpalten (std::string);
 char setVariables (std::string);
 struct arra same(int zeilen, std::string var[]);
@@ -85,27 +86,36 @@ int main(int argc, char *argv[])
 
     }
     struct arra x;
-    x = oneOnEach(fileLength,spaltenZahlI);
+    x = oneOnEachB(fileLength,spaltenZahlI);
     cout << x.clause[0] << endl;
     struct arra y;
     y = same(zeilenZahlI,linear);
     cout << y.clause[2] << endl;
+    struct arra z;
+    z = oneOnEachW(fileLength,spaltenZahlI);
     fstream f;
     f.open("formular.cnf", ios::out);
     f << 'p' << " cnf " << fileLength << ' ' << 200 << endl;
-    for (int i=0; i<=sizeof(y);i++)
+    for (int i=0; i<=3;i++)
     {
-        for (int j=0; j<=sizeof(x);j++)
+        f<< y.clause[i];
+        f<< x.clause[i];
+        f << z.clause[i];
+        /*for (int j=0; j<=sizeof(x);j++)
         {
-            f << y.clause[i] << x.clause[j];
-        }
+            f<< x.clause[j] << j << " zu x " << endl;
+            for (int m=0; m<=sizeof(z);m++)
+            {
+                f << z.clause[m] << m << " zu z " << endl;
+            }
+        }*/
     }
     f.close();
     return 0;
 }
 // 1 = schwarz 0 = weiß
 // oneOnEach gibt die CNF aus, die prüft, dass max. 2 einer Farbe nebeneinander sind
-struct arra oneOnEach (int zeichen, int spalten)
+struct arra oneOnEachB (int zeichen, int spalten)
 {
     cout << "zeichen: " << zeichen << endl;
     struct arra conj;
@@ -178,7 +188,79 @@ struct arra oneOnEach (int zeichen, int spalten)
     }
     return conj;
 }
+struct arra oneOnEachW (int zeichen, int spalten)
+{
+    cout << "zeichen: " << zeichen << endl;
+    struct arra conj;
+    conj.clause = new string[2];
+    for (int i=1; i<=zeichen; i++)
+    {
+        // erstes Feld
+        if (i==1)
+        {
+            conj.clause[0] = conj.clause[0] + ' ' + to_string(i) + ' ' + to_string(i+1) + ' ' + to_string(i+2) + " 0" + '\n';
+            conj.clause[1] = conj.clause[1] + ' ' + to_string(i) + ' ' + to_string(i+spalten) + ' ' + to_string(i+spalten*2) + " 0" + '\n';
 
+        }
+        else
+        {
+            // erste Spalte, außer letztes Feld in erster Spalte
+            if (((i%spalten) == 1) && i<=(zeichen - (spalten*2)))
+            {
+                conj.clause[0] = conj.clause[0] + ' ' + to_string(i) + ' ' + to_string(i+1) + ' ' + to_string(i+2) + " 0" + '\n';
+                conj.clause[1] = conj.clause[1] + ' ' + to_string(i) + ' ' + to_string(i+spalten) + ' ' + to_string(i+spalten*2) + " 0" + '\n';
+            }
+            else
+            {
+                // erste Zeile und eine der letzten 2 Spalten
+                if (i<=spalten && ((i%spalten)==0 || (i%spalten==(spalten-1))))
+                {
+                    conj.clause[1] = conj.clause[1] + ' ' + to_string(i) + ' ' + to_string(i+spalten) + ' ' + to_string(i+spalten*2) + " 0" + '\n';
+                }
+                else
+                {
+                    // Rest erste Spalte
+                    if (i<=spalten)
+                    {
+                    conj.clause[0] = conj.clause[0] + ' ' + to_string(i) + ' ' + to_string(i+1) + ' ' + to_string(i+2) + " 0" + '\n';
+                    conj.clause[1] = conj.clause[1] + ' ' + to_string(i) + ' ' + to_string(i+spalten) + ' ' + to_string(i+spalten*2) + " 0" + '\n';
+                    }
+                    else
+                    {
+                        // Feld das in letzten 2 Spalten und letzen 2 Zeilen liegt
+                        if(((i%spalten)==0 || (i%spalten==(spalten-1))) && i>(zeichen-(spalten*2)))
+                        {
+
+                        }
+                        else
+                        {
+                            // Feld das im Rest der letzten 2 Zeilen liegt.
+                            if(i>(zeichen-(spalten*2)))
+                            {
+                                conj.clause[0] = conj.clause[0] + ' ' + to_string(i) + ' ' + to_string(i+1) + ' ' + to_string(i+2) + " 0" + '\n';
+                            }
+                            else
+                            {
+                                // Feld das im Rest der letzten 2 Spalten liegt.
+                                if((i%spalten)==0 || (i%spalten)==(spalten-1))
+                                {
+                                    conj.clause[1] = conj.clause[1] + ' ' + to_string(i) + ' ' + to_string(i+spalten) + ' ' + to_string(i+spalten*2) + " 0" + '\n';
+                                }
+                                else
+                                {
+                                    // Restliche Felder
+                                    conj.clause[0] = conj.clause[0] + ' ' + to_string(i) + ' ' + to_string(i+1) + ' ' + to_string(i+2) + " 0" + '\n';
+                                    conj.clause[1] = conj.clause[1] + ' ' + to_string(i) + ' ' + to_string(i+spalten) + ' ' + to_string(i+spalten*2) + " 0" + '\n';
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return conj;
+}
 struct arra same(int zeilen, string var[])
 {
     struct arra conj;
