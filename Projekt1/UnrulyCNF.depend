@@ -36,17 +36,17 @@
 1541611268 c:\users\kuchar\documents\uni\satsolving\projekt1\cnf.h
 	<string>
 
-1541700382 source:/home/andrea/Dokumente/SatSolving/SATsolving/Projekt1/cnf.cpp
+1541771279 source:/home/andrea/Dokumente/SatSolving/SATsolving/Projekt1/cnf.cpp
 	<iostream>
 	<fstream>
 	<string>
 	<limits>
 	"cnf.h"
 
-1541704758 /home/andrea/Dokumente/SatSolving/SATsolving/Projekt1/cnf.h
+1541771279 /home/andrea/Dokumente/SatSolving/SATsolving/Projekt1/cnf.h
 	<string>
 
-1541697329 source:/home/andrea/Dokumente/SatSolving/SATsolving/Projekt1/fileExtraction.cpp
+1541771279 source:/home/andrea/Dokumente/SatSolving/SATsolving/Projekt1/fileExtraction.cpp
 	<iostream>
 	<fstream>
 	<string>
@@ -54,10 +54,10 @@
 	<sstream>
 	"fileExtraction.h"
 
-1541727707 /home/andrea/Dokumente/SatSolving/SATsolving/Projekt1/fileExtraction.h
+1541771279 /home/andrea/Dokumente/SatSolving/SATsolving/Projekt1/fileExtraction.h
 	<string>
 
-1541728856 source:/home/andrea/Dokumente/SatSolving/SATsolving/Projekt1/main.cpp
+1541781020 source:/home/andrea/Dokumente/SatSolving/SATsolving/Projekt1/main.cpp
 	<iostream>
 	<fstream>
 	<string>
