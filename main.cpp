@@ -89,7 +89,7 @@ int main(int argc, char *argv[])
     cout << x.clause[0] << endl;
     struct arra y;
     y = same(zeilenZahlI,linear) ;
-    cout << y.clause[0] << endl;
+    cout << y.clause[2] << endl;
     return 0;
 }
 // 1 = schwarz 0 = weiß
@@ -147,15 +147,19 @@ struct arra same(int zeilen, string var[]) {
                                 conj.clause[0] = conj.clause[0] + '\n' ;
                                 conj.clause[1] = conj.clause[1] + '\n' ;
                             }
+                            break;
                         }
                     case 'B' :
                         {
-                             conj.clause[2] = conj.clause[0] + ' ' +to_string(pos) + '\n' ;
+                             conj.clause[2] = conj.clause[2] + ' ' +to_string(pos) + '\n' ;
+                             break;
                         }
                     case 'W' :
                         {
-                             conj.clause[2] = conj.clause[0] + ' ' +to_string(-(pos)) + '\n' ;
+                             conj.clause[2] = conj.clause[2] + ' ' +to_string(-(pos)) + '\n' ;
+                             break;
                         }
+                    default : break;
                 }
                if ((j+1 == var[i].length()) && (!flag)) {
                   conj.clause[0] = conj.clause[0] + '\n' ;
