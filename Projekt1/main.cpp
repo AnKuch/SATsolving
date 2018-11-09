@@ -10,7 +10,7 @@ struct arra oneOnEachB (int zeichen, int spalten);
 struct arra oneOnEachW (int zeichen, int spalten);
 int zeilenSpalten (std::string);
 char setVariables (std::string);
-struct arra same(int zeilen, std::string var[]);
+struct arra same(int, int);
 
 using namespace std;
 
@@ -89,8 +89,8 @@ int main(int argc, char *argv[])
     x = oneOnEachB(fileLength,spaltenZahlI);
     cout << x.clause[0] << endl;
     struct arra y;
-    y = same(zeilenZahlI,linear);
-    cout << y.clause[2] << endl;
+    y = same(spaltenZahlI,zeilenZahlI);
+    cout << y.clause[0] << endl;
     struct arra z;
     z = oneOnEachW(fileLength,spaltenZahlI);
     fstream f;
@@ -261,7 +261,35 @@ struct arra oneOnEachW (int zeichen, int spalten)
     }
     return conj;
 }
-struct arra same(int zeilen, string var[])
+struct arra same(int zeilenlaenge, int zeilenzahl)
+{
+    struct arra conj;
+    conj.clause = new string[2] ;
+    for (int z = 0; z<=(zeilenzahl-1); z++)
+    {
+        for (int i = 1; i<=((zeilenlaenge/2)+1); i++)
+        {
+            for (int j=0; j<(zeilenlaenge/2); j++)
+            {
+                conj.clause[0] = conj.clause[0] + ' ' + to_string((zeilenlaenge*z)+(i+j));
+            }
+            conj.clause[0] = conj.clause[0] + " 0" + '\n';
+        }
+    }
+    for (int z = 0; z<=(zeilenzahl-1); z++)
+    {
+        for (int i = 1; i<=(zeilenlaenge/2); i++)
+        {
+            for (int j=0; j<=(zeilenlaenge/2); j++)
+            {
+                conj.clause[1] = conj.clause[0] + ' ' + to_string(-((zeilenlaenge*z)*(i+j)));
+            }
+            conj.clause[1] = conj.clause[0] + " 0" + '\n';
+        }
+    }
+    return conj;
+}
+/*struct arra same(int zeilen, string var[])
 {
     struct arra conj;
     conj.clause = new string[3] ;
@@ -309,7 +337,7 @@ struct arra same(int zeilen, string var[])
     return conj;
 
 
-}
+}*/
 int zeilenSpalten (std::string a)
 {
     std::stringstream parser;
