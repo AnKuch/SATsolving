@@ -3,14 +3,20 @@
 #include <string>
 #include <limits>
 #include <sstream>
-#include "fileExtraction.h"
+//#include "fileExtraction.h"
+#include <algorithm>
 //#include "cnf.h"
+#include <vector>
+#include <iterator>
+#include <numeric>
+
 
 struct arra oneOnEachB (int zeichen, int spalten);
 struct arra oneOnEachW (int zeichen, int spalten);
 int zeilenSpalten (std::string);
 char setVariables (std::string);
-struct arra same(int, int);
+std::string sameB(int, int);
+std::string sameW(int, int);
 
 using namespace std;
 
@@ -68,12 +74,12 @@ int main(int argc, char *argv[])
                 {
                     case 'B' :
                         {
-                            variablesFix = variablesFix + ' ' + to_string(i);
+                            variablesFix = variablesFix + to_string(i) + " 0" + '\n';
                             break;
                         }
                     case 'W' :
                         {
-                            variablesFix = variablesFix + ' ' + to_string(-i);
+                            variablesFix = variablesFix + to_string(-i) + " 0" + '\n';
                             break;
                         }
                     default :
@@ -85,32 +91,45 @@ int main(int argc, char *argv[])
         }
 
     }
+    // nur zwei schwarze Felder
     struct arra x;
     x = oneOnEachB(fileLength,spaltenZahlI);
-    cout << x.clause[0] << endl;
-    struct arra y;
-    y = same(spaltenZahlI,zeilenZahlI);
-    cout << y.clause[0] << endl;
+    // nur zwei weiﬂe Felder
     struct arra z;
     z = oneOnEachW(fileLength,spaltenZahlI);
-    fstream f;
-    f.open("formular.cnf", ios::out);
-    f << 'p' << " cnf " << fileLength << ' ' << 200 << endl;
+    // N/2 schwarze pro Zeile
+    string sameBlack;
+    sameBlack = sameB(spaltenZahlI,zeilenZahlI);
+    // N/2 weiﬂe pro Zeile
+    string sameWhite;
+    sameWhite = sameW(spaltenZahlI,zeilenZahlI);
+    // Hilfsdatei um Arrays durch for-Schleife in die Datei holen zu kˆnnen und vor den anderen Klausel platzieren zu kˆnnen.
+    fstream fh;
+    fh.open("hilfsdatei.txt",ios::out);
     for (int i=0; i<=3;i++)
     {
-        f<< y.clause[i];
-        f<< x.clause[i];
-        f << z.clause[i];
-        /*for (int j=0; j<=sizeof(x);j++)
-        {
-            f<< x.clause[j] << j << " zu x " << endl;
-            for (int m=0; m<=sizeof(z);m++)
-            {
-                f << z.clause[m] << m << " zu z " << endl;
-            }
-        }*/
+        fh << x.clause[i];
+        fh << z.clause[i];
     }
+    fh.close();
+    // Hilfsdatei mit Lesefunktion ˆffnen und CNF-Datei ˆffnen
+    char c;
+    fstream f;
+    fh.open("hilfsdatei.txt",ios::in);
+    f.open("formular.cnf", ios::out);
+    // Header f¸r CNF file
+    f << 'p' << " cnf " << fileLength << ' ' << 200 << endl;
+    // Zeilen aus Hilfsdatei holen
+    while (fh.get(c)) {
+        f.put(c);
+      }
+      // Restliche Klauseln holen
+    f << sameBlack;
+    f << sameWhite;
+    f << variablesFix;
     f.close();
+    // Picosat starten
+    system("picosat -f formular.cnf");
     return 0;
 }
 // 1 = schwarz 0 = weiﬂ
@@ -125,8 +144,8 @@ struct arra oneOnEachB (int zeichen, int spalten)
         // erstes Feld
         if (i==1)
         {
-            conj.clause[0] = conj.clause[0] + ' ' + to_string(-i) + ' ' + to_string(-(i+1)) + ' ' + to_string(-(i+2)) + " 0" + '\n';
-            conj.clause[1] = conj.clause[1] + ' ' + to_string(-i) + ' ' + to_string(-(i+spalten)) + ' ' + to_string(-(i+spalten*2)) + " 0" + '\n';
+            conj.clause[0] = conj.clause[0] + to_string(-i) + ' ' + to_string(-(i+1)) + ' ' + to_string(-(i+2)) + " 0" + '\n';
+            conj.clause[1] = conj.clause[1] + to_string(-i) + ' ' + to_string(-(i+spalten)) + ' ' + to_string(-(i+spalten*2)) + " 0" + '\n';
 
         }
         else
@@ -134,23 +153,23 @@ struct arra oneOnEachB (int zeichen, int spalten)
             // erste Spalte, auﬂer letztes Feld in erster Spalte
             if (((i%spalten) == 1) && i<=(zeichen - (spalten*2)))
             {
-                conj.clause[0] = conj.clause[0] + ' ' + to_string(-i) + ' ' + to_string(-(i+1)) + ' ' + to_string(-(i+2)) + " 0" + '\n';
-                conj.clause[1] = conj.clause[1] + ' ' + to_string(-i) + ' ' + to_string(-(i+spalten)) + ' ' + to_string(-(i+spalten*2)) + " 0" + '\n';
+                conj.clause[0] = conj.clause[0] + to_string(-i) + ' ' + to_string(-(i+1)) + ' ' + to_string(-(i+2)) + " 0" + '\n';
+                conj.clause[1] = conj.clause[1] + to_string(-i) + ' ' + to_string(-(i+spalten)) + ' ' + to_string(-(i+spalten*2)) + " 0" + '\n';
             }
             else
             {
                 // erste Zeile und eine der letzten 2 Spalten
                 if (i<=spalten && ((i%spalten)==0 || (i%spalten==(spalten-1))))
                 {
-                    conj.clause[1] = conj.clause[1] + ' ' + to_string(-i) + ' ' + to_string(-(i+spalten)) + ' ' + to_string(-(i+spalten*2)) + " 0" + '\n';
+                    conj.clause[1] = conj.clause[1] + to_string(-i) + ' ' + to_string(-(i+spalten)) + ' ' + to_string(-(i+spalten*2)) + " 0" + '\n';
                 }
                 else
                 {
                     // Rest erste Spalte
                     if (i<=spalten)
                     {
-                    conj.clause[0] = conj.clause[0] + ' ' + to_string(-i) + ' ' + to_string(-(i+1)) + ' ' + to_string(-(i+2)) + " 0" + '\n';
-                    conj.clause[1] = conj.clause[1] + ' ' + to_string(-i) + ' ' + to_string(-(i+spalten)) + ' ' + to_string(-(i+spalten*2)) + " 0" + '\n';
+                    conj.clause[0] = conj.clause[0] + to_string(-i) + ' ' + to_string(-(i+1)) + ' ' + to_string(-(i+2)) + " 0" + '\n';
+                    conj.clause[1] = conj.clause[1] + to_string(-i) + ' ' + to_string(-(i+spalten)) + ' ' + to_string(-(i+spalten*2)) + " 0" + '\n';
                     }
                     else
                     {
@@ -164,20 +183,20 @@ struct arra oneOnEachB (int zeichen, int spalten)
                             // Feld das im Rest der letzten 2 Zeilen liegt.
                             if(i>(zeichen-(spalten*2)))
                             {
-                                conj.clause[0] = conj.clause[0] + ' ' + to_string(-i) + ' ' + to_string(-(i+1)) + ' ' + to_string(-(i+2)) + " 0" + '\n';
+                                conj.clause[0] = conj.clause[0] + to_string(-i) + ' ' + to_string(-(i+1)) + ' ' + to_string(-(i+2)) + " 0" + '\n';
                             }
                             else
                             {
                                 // Feld das im Rest der letzten 2 Spalten liegt.
                                 if((i%spalten)==0 || (i%spalten)==(spalten-1))
                                 {
-                                    conj.clause[1] = conj.clause[1] + ' ' + to_string(-i) + ' ' + to_string(-(i+spalten)) + ' ' + to_string(-(i+spalten*2)) + " 0" + '\n';
+                                    conj.clause[1] = conj.clause[1] + to_string(-i) + ' ' + to_string(-(i+spalten)) + ' ' + to_string(-(i+spalten*2)) + " 0" + '\n';
                                 }
                                 else
                                 {
                                     // Restliche Felder
-                                    conj.clause[0] = conj.clause[0] + ' ' + to_string(-i) + ' ' + to_string(-(i+1)) + ' ' + to_string(-(i+2)) + " 0" + '\n';
-                                    conj.clause[1] = conj.clause[1] + ' ' + to_string(-i) + ' ' + to_string(-(i+spalten)) + ' ' + to_string(-(i+spalten*2)) + " 0" + '\n';
+                                    conj.clause[0] = conj.clause[0] + to_string(-i) + ' ' + to_string(-(i+1)) + ' ' + to_string(-(i+2)) + " 0" + '\n';
+                                    conj.clause[1] = conj.clause[1] + to_string(-i) + ' ' + to_string(-(i+spalten)) + ' ' + to_string(-(i+spalten*2)) + " 0" + '\n';
                                 }
                             }
                         }
@@ -198,8 +217,8 @@ struct arra oneOnEachW (int zeichen, int spalten)
         // erstes Feld
         if (i==1)
         {
-            conj.clause[0] = conj.clause[0] + ' ' + to_string(i) + ' ' + to_string(i+1) + ' ' + to_string(i+2) + " 0" + '\n';
-            conj.clause[1] = conj.clause[1] + ' ' + to_string(i) + ' ' + to_string(i+spalten) + ' ' + to_string(i+spalten*2) + " 0" + '\n';
+            conj.clause[0] = conj.clause[0] + to_string(i) + ' ' + to_string(i+1) + ' ' + to_string(i+2) + " 0" + '\n';
+            conj.clause[1] = conj.clause[1] + to_string(i) + ' ' + to_string(i+spalten) + ' ' + to_string(i+spalten*2) + " 0" + '\n';
 
         }
         else
@@ -207,23 +226,23 @@ struct arra oneOnEachW (int zeichen, int spalten)
             // erste Spalte, auﬂer letztes Feld in erster Spalte
             if (((i%spalten) == 1) && i<=(zeichen - (spalten*2)))
             {
-                conj.clause[0] = conj.clause[0] + ' ' + to_string(i) + ' ' + to_string(i+1) + ' ' + to_string(i+2) + " 0" + '\n';
-                conj.clause[1] = conj.clause[1] + ' ' + to_string(i) + ' ' + to_string(i+spalten) + ' ' + to_string(i+spalten*2) + " 0" + '\n';
+                conj.clause[0] = conj.clause[0] + to_string(i) + ' ' + to_string(i+1) + ' ' + to_string(i+2) + " 0" + '\n';
+                conj.clause[1] = conj.clause[1] + to_string(i) + ' ' + to_string(i+spalten) + ' ' + to_string(i+spalten*2) + " 0" + '\n';
             }
             else
             {
                 // erste Zeile und eine der letzten 2 Spalten
                 if (i<=spalten && ((i%spalten)==0 || (i%spalten==(spalten-1))))
                 {
-                    conj.clause[1] = conj.clause[1] + ' ' + to_string(i) + ' ' + to_string(i+spalten) + ' ' + to_string(i+spalten*2) + " 0" + '\n';
+                    conj.clause[1] = conj.clause[1] + to_string(i) + ' ' + to_string(i+spalten) + ' ' + to_string(i+spalten*2) + " 0" + '\n';
                 }
                 else
                 {
                     // Rest erste Spalte
                     if (i<=spalten)
                     {
-                    conj.clause[0] = conj.clause[0] + ' ' + to_string(i) + ' ' + to_string(i+1) + ' ' + to_string(i+2) + " 0" + '\n';
-                    conj.clause[1] = conj.clause[1] + ' ' + to_string(i) + ' ' + to_string(i+spalten) + ' ' + to_string(i+spalten*2) + " 0" + '\n';
+                    conj.clause[0] = conj.clause[0] + to_string(i) + ' ' + to_string(i+1) + ' ' + to_string(i+2) + " 0" + '\n';
+                    conj.clause[1] = conj.clause[1] + to_string(i) + ' ' + to_string(i+spalten) + ' ' + to_string(i+spalten*2) + " 0" + '\n';
                     }
                     else
                     {
@@ -237,20 +256,20 @@ struct arra oneOnEachW (int zeichen, int spalten)
                             // Feld das im Rest der letzten 2 Zeilen liegt.
                             if(i>(zeichen-(spalten*2)))
                             {
-                                conj.clause[0] = conj.clause[0] + ' ' + to_string(i) + ' ' + to_string(i+1) + ' ' + to_string(i+2) + " 0" + '\n';
+                                conj.clause[0] = conj.clause[0] + to_string(i) + ' ' + to_string(i+1) + ' ' + to_string(i+2) + " 0" + '\n';
                             }
                             else
                             {
                                 // Feld das im Rest der letzten 2 Spalten liegt.
                                 if((i%spalten)==0 || (i%spalten)==(spalten-1))
                                 {
-                                    conj.clause[1] = conj.clause[1] + ' ' + to_string(i) + ' ' + to_string(i+spalten) + ' ' + to_string(i+spalten*2) + " 0" + '\n';
+                                    conj.clause[1] = conj.clause[1] + to_string(i) + ' ' + to_string(i+spalten) + ' ' + to_string(i+spalten*2) + " 0" + '\n';
                                 }
                                 else
                                 {
                                     // Restliche Felder
-                                    conj.clause[0] = conj.clause[0] + ' ' + to_string(i) + ' ' + to_string(i+1) + ' ' + to_string(i+2) + " 0" + '\n';
-                                    conj.clause[1] = conj.clause[1] + ' ' + to_string(i) + ' ' + to_string(i+spalten) + ' ' + to_string(i+spalten*2) + " 0" + '\n';
+                                    conj.clause[0] = conj.clause[0] + to_string(i) + ' ' + to_string(i+1) + ' ' + to_string(i+2) + " 0" + '\n';
+                                    conj.clause[1] = conj.clause[1] + to_string(i) + ' ' + to_string(i+spalten) + ' ' + to_string(i+spalten*2) + " 0" + '\n';
                                 }
                             }
                         }
@@ -261,83 +280,69 @@ struct arra oneOnEachW (int zeichen, int spalten)
     }
     return conj;
 }
-struct arra same(int zeilenlaenge, int zeilenzahl)
+string sameB(int n, int zeilen)
 {
-    struct arra conj;
-    conj.clause = new string[2] ;
-    for (int z = 0; z<=(zeilenzahl-1); z++)
+    int k= (n/2)+1;
+    string clause;
+
+    for (int l=0; l<zeilen; l++)
     {
-        for (int i = 1; i<=((zeilenlaenge/2)+1); i++)
-        {
-            for (int j=0; j<(zeilenlaenge/2); j++)
-            {
-                conj.clause[0] = conj.clause[0] + ' ' + to_string((zeilenlaenge*z)+(i+j));
-            }
-            conj.clause[0] = conj.clause[0] + " 0" + '\n';
-        }
+        int s = l*n;
+        vector<string> selected;
+        vector<bool> selector(8);
+        fill(selector.begin(), selector.begin() + k, true);
+        do {
+             for (int i = 0; i < n; i++) {
+              int m = i+1+s;
+              if (selector[i]) {
+                    selected.push_back(to_string(m));
+              }
+             }
+             //     combinations.push_back(selected);
+             for(std::vector<std::string>::const_iterator i = selected.begin(); i != selected.end(); ++i)
+             {
+                 clause = clause + *i + ' ';
+             }
+             selected.clear();
+             clause = clause + " 0" + '\n';
+         }
+         while (prev_permutation(selector.begin(), selector.end()));
+    // print integers and permute bitmask
     }
-    for (int z = 0; z<=(zeilenzahl-1); z++)
-    {
-        for (int i = 1; i<=(zeilenlaenge/2); i++)
-        {
-            for (int j=0; j<=(zeilenlaenge/2); j++)
-            {
-                conj.clause[1] = conj.clause[0] + ' ' + to_string(-((zeilenlaenge*z)*(i+j)));
-            }
-            conj.clause[1] = conj.clause[0] + " 0" + '\n';
-        }
-    }
-    return conj;
+    return clause;
 }
-/*struct arra same(int zeilen, string var[])
+string sameW(int n, int zeilen)
 {
-    struct arra conj;
-    conj.clause = new string[3] ;
-    int pos =0; // Aktuelle Gesamtposition
-    for (int i = 2; i<=zeilen; i++)
-    {   int sppos = 0 ; // Spaltenz‰hler f¸r ?
+    int k= (n/2)+1;
+    string clause;
 
-
-            for (int j = 0; j< var[i].length(); j++)
-            {
-                pos++;
-                bool flag = false ;
-                switch (var[i][j])
-                {
-                    case '?' :
-                        {
-                            sppos++;
-                            conj.clause[0] = conj.clause[0] + ' '+ to_string(pos)   ;
-                            conj.clause[1] = conj.clause[1] + ' '+ to_string(-(pos)) ;
-                            if (sppos%3 ==0 ) {
-                                flag = true;
-                                conj.clause[0] = conj.clause[0] + " 0" + '\n' ;
-                                conj.clause[1] = conj.clause[1] + " 0" + '\n' ;
-                            }
-                            break;
-                        }
-                    case 'B' :
-                        {
-                             conj.clause[2] = conj.clause[2] + ' ' +to_string(pos) + " 0" + '\n' ;
-                             break;
-                        }
-                    case 'W' :
-                        {
-                             conj.clause[2] = conj.clause[2] + ' ' +to_string(-(pos)) + " 0" + '\n' ;
-                             break;
-                        }
-                    default : break;
-                }
-               if ((j+1 == var[i].length()) && (!flag)) {
-                  conj.clause[0] = conj.clause[0] + " 0" + '\n' ;
-                  conj.clause[1] = conj.clause[1] + " 0" + '\n' ;
-               }
-            }
+    for (int j=0; j<zeilen; j++)
+    {
+        int s = j*n;
+        vector<string> selected;
+        vector<bool> selector(8);
+        fill(selector.begin(), selector.begin() + 5, true);
+        do {
+             for (int i = 0; i < 8; i++) {
+                int m = i+1+s;
+              if (selector[i]) {
+                    selected.push_back(to_string(-m));
+              }
+             }
+             //     combinations.push_back(selected);
+             for(std::vector<std::string>::const_iterator i = selected.begin(); i != selected.end(); ++i)
+             {
+                 clause = clause + *i + ' ';
+             }
+             selected.clear();
+             clause = clause + " 0" + '\n';
+         }
+         while (prev_permutation(selector.begin(), selector.end()));
+    // print integers and permute bitmask
     }
-    return conj;
+    return clause;
+}
 
-
-}*/
 int zeilenSpalten (std::string a)
 {
     std::stringstream parser;
