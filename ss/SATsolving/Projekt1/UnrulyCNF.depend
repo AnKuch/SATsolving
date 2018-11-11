@@ -1,0 +1,81 @@
+# depslib dependency file v1.0
+1541500088 source:c:\users\kuchar\documents\uni\c++\unrulycnf\main.cpp
+	<iostream>
+	<fstream>
+	<string>
+	<limits>
+	<sstream>
+
+1541692007 source:c:\users\kuchar\documents\uni\satsolving\projekt1\main.cpp
+	<iostream>
+	<fstream>
+	<string>
+	<limits>
+	<sstream>
+	"fileExtraction.h"
+	"cnf.h"
+
+1541533655 c:\users\kuchar\documents\uni\satsolving\projekt1\fileextraction.h
+	<string>
+
+1541536486 source:c:\users\kuchar\documents\uni\satsolving\projekt1\fileextraction.cpp
+	<iostream>
+	<fstream>
+	<string>
+	<limits>
+	<sstream>
+	"fileExtraction.h"
+
+1541692094 source:c:\users\kuchar\documents\uni\satsolving\projekt1\cnf.cpp
+	<iostream>
+	<fstream>
+	<string>
+	<limits>
+	"cnf.h"
+
+1541611268 c:\users\kuchar\documents\uni\satsolving\projekt1\cnf.h
+	<string>
+
+1541771279 source:/home/andrea/Dokumente/SatSolving/SATsolving/Projekt1/cnf.cpp
+	<iostream>
+	<fstream>
+	<string>
+	<limits>
+	"cnf.h"
+
+1541771279 /home/andrea/Dokumente/SatSolving/SATsolving/Projekt1/cnf.h
+	<string>
+
+1541771279 source:/home/andrea/Dokumente/SatSolving/SATsolving/Projekt1/fileExtraction.cpp
+	<iostream>
+	<fstream>
+	<string>
+	<limits>
+	<sstream>
+	"fileExtraction.h"
+
+1541771279 /home/andrea/Dokumente/SatSolving/SATsolving/Projekt1/fileExtraction.h
+	<string>
+
+1541808170 source:/home/andrea/Dokumente/SatSolving/SATsolving/Projekt1/main.cpp
+	<iostream>
+	<fstream>
+	<string>
+	<limits>
+	<sstream>
+	<algorithm>
+	<vector>
+	<iterator>
+	<numeric>
+
+1541897844 source:/Users/bg/Desktop/ss/SATsolving/Projekt1/main.cpp
+	<iostream>
+	<fstream>
+	<string>
+	<limits>
+	<sstream>
+	<algorithm>
+	<vector>
+	<iterator>
+	<numeric>
+
