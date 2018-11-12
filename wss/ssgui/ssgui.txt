@@ -1,0 +1,1 @@
+./Release/wxcrafter_bitmaps.cpp.o ./Release/wxcrafter.cpp.o ./Release/main.cpp.o
