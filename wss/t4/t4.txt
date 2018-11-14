@@ -1,0 +1,1 @@
+./Release/clsol.cpp.o ./Release/main.cpp.o ./Release/gui1.cpp.o

@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CodeLite_Workspace Name="wss" Database="" Version="10.0.0">
-  <Project Name="ssgui" Path="ssgui/ssgui.project" Active="Yes"/>
+  <Project Name="t4" Path="t4/t4.project" Active="Yes"/>
   <BuildMatrix>
     <WorkspaceConfiguration Name="Debug" Selected="no">
       <Environment/>
-      <Project Name="ssgui" ConfigName="Debug"/>
+      <Project Name="t4" ConfigName="Debug"/>
     </WorkspaceConfiguration>
     <WorkspaceConfiguration Name="Release" Selected="yes">
       <Environment/>
-      <Project Name="ssgui" ConfigName="Release"/>
+      <Project Name="t4" ConfigName="Release"/>
     </WorkspaceConfiguration>
   </BuildMatrix>
 </CodeLite_Workspace>
