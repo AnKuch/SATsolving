@@ -1,0 +1,1 @@
+./Debug/clsol.cpp.o ./Debug/gui1.cpp.o ./Debug/main.cpp.o
